@@ -1,20 +1,15 @@
 import * as React from 'react'
-import Button from '@mui/material/Button'
-import DeleteIcon from '@mui/icons-material/Delete'
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
-import HomeIcon from '@mui/icons-material/Home'
-import { pink } from '@mui/material/colors'
-import useMediaQuery from '@mui/material/useMediaQuery'
 import { useColorScheme } from '@mui/material/styles'
+import theme from './theme'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import Box from '@mui/material/Box'
 import LightModeIcon from '@mui/icons-material/LightMode'
-import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined'
 import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness'
 import { DarkModeRounded } from '@mui/icons-material'
+import Container from '@mui/material/Container'
 
 
 function ModeSelect() {
@@ -57,42 +52,37 @@ function ModeSelect() {
   )
 }
 
-function ModeToggle() {
-  const { mode, setMode } = useColorScheme();
-  // const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
-  // const prefersLightMode = useMediaQuery('(prefers-color-scheme: light)')
-  // console.log(prefersDarkMode)
-  // console.log(prefersLightMode)
-
-  return (
-    <Button
-      onClick={() => {
-        setMode(mode === 'light' ? 'dark' : 'light');
-      }}
-    >
-      {mode === 'light' ? 'Turn dark' : 'Turn light'}
-    </Button>
-  );
-}
-
 function App() {
   return (
-    <>
-      <ModeSelect />
-      <ModeToggle />
-      <div>HELLO WORLD</div>
-      <Button variant="contained">Hello world</Button>
-      <br></br>
-      <DeleteIcon />
-      <DeleteForeverIcon />
-      <HomeIcon />
-      <HomeIcon color="primary" />
-      <HomeIcon color="secondary" />
-      <HomeIcon color="success" />
-      <HomeIcon color="action" />
-      <HomeIcon color="disabled" />
-      <HomeIcon sx={{ color: pink[500] }} />
-    </>
+    <Container disableGutters maxWidth={false} sx={{height:'100vh'}}>
+      <Box sx={{
+        backgroundColor:'primary.light',
+        width: '100%',
+        height: (theme) => theme.hello.appBarHeight,
+        display: 'flex',
+        alignItems: 'center'
+      }}>
+        <ModeSelect />
+      </Box>
+      <Box sx={{
+        backgroundColor:'primary.dark',
+        width: '100%',
+        height: (theme) => theme.hello.boardBarHeight,
+        display: 'flex',
+        alignItems: 'center'
+      }}>
+      BoardBar
+      </Box>
+      <Box sx={{
+        backgroundColor:'primary.main',
+        width: '100%',
+        height: (theme) => `calc(100vh - ${theme.hello.appBarHeight} - ${theme.hello.boardBarHeight})`,
+        display: 'flex',
+        alignItems: 'center'
+      }}>
+      BoardContent
+      </Box>
+    </Container>
   )
 }
 
