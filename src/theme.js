@@ -1,23 +1,25 @@
-import { experimental_extendTheme as extendTheme} from '@mui/material/styles'
+import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
+import {teal, deepOrange, cyan, orange} from '@mui/material/colors'
 
 const theme = extendTheme({
-  colorSchemes: {
-    light: {
-      palette: {
-        primary: {
-          main: '#ff5252',
-        }
-      }
+    hello: {
+        appBarHeight: '48px',
+        boardBarHeight: '58px'
     },
-    dark: {
-      palette: {
-        primary: {
-          main: '#000'
+    colorSchemes: {
+        light: {
+            palette: {
+                primary: teal,
+                secondary: deepOrange
+            }
+        },
+        dark: {
+            palette: {
+                primary: cyan,
+                secondary: orange
+            }
         }
-      }
     }
-  },
-  // ...other properties
 })
 
 export default theme
