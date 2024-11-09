@@ -1,6 +1,6 @@
 import React from 'react'
 import Box from '@mui/material/Box'
-import theme from '../../../theme'
+import theme from '~/theme'
 
 function BoardContent() {
     return (
