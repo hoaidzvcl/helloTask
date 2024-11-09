@@ -11,7 +11,6 @@ function BoardContent() {
             display: 'flex',
             alignItems: 'center'
         }}>
-            BoardContent
         </Box>
     )
 }
