@@ -27,8 +27,8 @@ function Card({ card }) {
             {shouldShowCardActions() &&
                 <CardActions sx={{ p: '0 4px 8px 4px' }}>
                     {!!card?.memberIds.length && <Button size="small" startIcon={<GroupIcon />}>{card?.memberIds.length}</Button>}
-                    {!!card?.comments.length && <Button size="small" startIcon={<GroupIcon />}>{card?.comments.length}</Button>}
-                    {!!card?.attachments.length && <Button size="small" startIcon={<GroupIcon />}>{card?.attachments.length}</Button>}
+                    {!!card?.comments.length && <Button size="small" startIcon={<CommentIcon />}>{card?.comments.length}</Button>}
+                    {!!card?.attachments.length && <Button size="small" startIcon={<AttachmentIcon />}>{card?.attachments.length}</Button>}
                 </CardActions>
             }
         </MuiCard>
