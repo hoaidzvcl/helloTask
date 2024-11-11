@@ -12,8 +12,9 @@ import AvatarGroup from '@mui/material/AvatarGroup'
 import Tooltip from '@mui/material/Tooltip'
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
 import Button from '@mui/material/Button'
+import { capitalizeFirstLetter } from '~/utils/formatters'
 
-function BoardBar() {
+function BoardBar({board}) {
     const boardbarItemStyle = {
         color: 'white',
         bgcolor: 'transparent',
@@ -43,13 +44,13 @@ function BoardBar() {
                 <Chip
                     sx={boardbarItemStyle}
                     icon={<DashboardIcon />}
-                    label="My Board"
+                    label= {board?.title}
                     clickable
                 />
                 <Chip
                     sx={boardbarItemStyle}
                     icon={<VpnLockIcon />}
-                    label="Public/Private/Workspace"
+                    label= {capitalizeFirstLetter(board?.type)}
                     clickable
                 />
                 <Chip
