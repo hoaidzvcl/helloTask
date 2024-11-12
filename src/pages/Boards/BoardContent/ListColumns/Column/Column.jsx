@@ -85,50 +85,52 @@ function Column({ column }) {
                     </Typography>
                     <Box>
                         <Tooltip title="More Options">
-                            <ExpandMoreIcon
-                                sx={{ color: 'text.primary', cursor: 'pointer' }}
-                                id="basic-column-dropdown"
-                                aria-controls={open ? 'basic-menu-column-dropdown' : undefined}
-                                aria-haspopup="true"
-                                aria-expanded={open ? 'true' : undefined}
-                                onClick={handleClick}
-                            />
-                            <Menu
-                                id="basic-menu-column-dropdown"
-                                anchorEl={anchorEl}
-                                open={open}
-                                onClose={handleClose}
-                                MenuListProps={{
-                                    'aria-labelledby': 'basic-column-dropdown',
-                                }}
-                            >
-                                <MenuItem>
-                                    <ListItemIcon><AddCardIcon fontSize="small" /></ListItemIcon>
-                                    <ListItemText>Add new card</ListItemText>
-                                </MenuItem>
-                                <MenuItem>
-                                    <ListItemIcon><ContentCut fontSize="small" /></ListItemIcon>
-                                    <ListItemText>Cut</ListItemText>
-                                </MenuItem>
-                                <MenuItem>
-                                    <ListItemIcon><ContentCopy fontSize="small" /></ListItemIcon>
-                                    <ListItemText>Copy</ListItemText>
-                                </MenuItem>
-                                <MenuItem>
-                                    <ListItemIcon><ContentPaste fontSize="small" /></ListItemIcon>
-                                    <ListItemText>Paste</ListItemText>
-                                </MenuItem>
-                                <Divider />
-                                <MenuItem>
-                                    <ListItemIcon><DeleteIcon fontSize="small" /></ListItemIcon>
-                                    <ListItemText>Romove This Column</ListItemText>
-                                </MenuItem>
-                                <MenuItem>
-                                    <ListItemIcon><Cloud fontSize="small" /></ListItemIcon>
-                                    <ListItemText>Archive This Column</ListItemText>
-                                </MenuItem>
-                            </Menu>
+                            <span>
+                                <ExpandMoreIcon
+                                    sx={{ color: 'text.primary', cursor: 'pointer' }}
+                                    id="basic-column-dropdown"
+                                    aria-controls={open ? 'basic-menu-column-dropdown' : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={open ? 'true' : undefined}
+                                    onClick={handleClick}
+                                />
+                            </span>
                         </Tooltip>
+                        <Menu
+                            id="basic-menu-column-dropdown"
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                            MenuListProps={{
+                                'aria-labelledby': 'basic-column-dropdown',
+                            }}
+                        >
+                            <MenuItem>
+                                <ListItemIcon><AddCardIcon fontSize="small" /></ListItemIcon>
+                                <ListItemText>Add new card</ListItemText>
+                            </MenuItem>
+                            <MenuItem>
+                                <ListItemIcon><ContentCut fontSize="small" /></ListItemIcon>
+                                <ListItemText>Cut</ListItemText>
+                            </MenuItem>
+                            <MenuItem>
+                                <ListItemIcon><ContentCopy fontSize="small" /></ListItemIcon>
+                                <ListItemText>Copy</ListItemText>
+                            </MenuItem>
+                            <MenuItem>
+                                <ListItemIcon><ContentPaste fontSize="small" /></ListItemIcon>
+                                <ListItemText>Paste</ListItemText>
+                            </MenuItem>
+                            <Divider />
+                            <MenuItem>
+                                <ListItemIcon><DeleteIcon fontSize="small" /></ListItemIcon>
+                                <ListItemText>Romove This Column</ListItemText>
+                            </MenuItem>
+                            <MenuItem>
+                                <ListItemIcon><Cloud fontSize="small" /></ListItemIcon>
+                                <ListItemText>Archive This Column</ListItemText>
+                            </MenuItem>
+                        </Menu>
                     </Box>
                 </Box>
 
