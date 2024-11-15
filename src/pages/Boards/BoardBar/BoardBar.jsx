@@ -14,7 +14,7 @@ import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
 import Button from '@mui/material/Button'
 import { capitalizeFirstLetter } from '~/utils/formatters'
 
-function BoardBar({board}) {
+function BoardBar({ board }) {
     const boardbarItemStyle = {
         color: 'white',
         bgcolor: 'transparent',
@@ -41,16 +41,18 @@ function BoardBar({board}) {
             bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2')
         }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Chip
-                    sx={boardbarItemStyle}
-                    icon={<DashboardIcon />}
-                    label= {board?.title}
-                    clickable
-                />
+                <Tooltip title={board?.description}>
+                    <Chip
+                        sx={boardbarItemStyle}
+                        icon={<DashboardIcon />}
+                        label={board?.title}
+                        clickable
+                    />
+                </Tooltip>
                 <Chip
                     sx={boardbarItemStyle}
                     icon={<VpnLockIcon />}
-                    label= {capitalizeFirstLetter(board?.type)}
+                    label={capitalizeFirstLetter(board?.type)}
                     clickable
                 />
                 <Chip
@@ -80,7 +82,7 @@ function BoardBar({board}) {
                     sx={{
                         color: 'white',
                         borderColor: 'white',
-                        '&:hover': {borderColor: 'white'}
+                        '&:hover': { borderColor: 'white' }
                     }}
                 >Invite
                 </Button>
@@ -94,7 +96,7 @@ function BoardBar({board}) {
                             fontSize: 16,
                             color: 'white',
                             cursor: 'pointer',
-                            '&:first-of-type': {bgcolor: '#a4b0be'}
+                            '&:first-of-type': { bgcolor: '#a4b0be' }
                         }
                     }}
                 >
