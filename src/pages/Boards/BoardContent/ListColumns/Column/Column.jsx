@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import theme from '~/theme'
+import { toast } from 'react-toastify'
 import Box from '@mui/material/Box'
 import Tooltip from '@mui/material/Tooltip'
 import Button from '@mui/material/Button'
@@ -57,8 +58,10 @@ function Column({ column }) {
     const [newCardTitle, setNewCardTitle] = useState('')
 
     const addNewCard = () => {
-        if (!newCardTitle) return
-        console.log(newCardTitle)
+        if (!newCardTitle) {
+            toast.error('Please enter card title!!', { position: 'bottom-right' })
+            return
+        }
 
         toggleOpenNewCardForm()
         setNewCardTitle('')
@@ -191,16 +194,16 @@ function Column({ column }) {
                                 value={newCardTitle}
                                 onChange={(e) => setNewCardTitle(e.target.value)}
                                 sx={{
-                                    '& label': {color: 'text.primary'},
+                                    '& label': { color: 'text.primary' },
                                     '& input': {
                                         color: (theme) => theme.palette.primary.main,
                                         bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#333643' : 'white')
                                     },
-                                    '& label.Mui-focused': {color: (theme) => theme.palette.primary.main},
+                                    '& label.Mui-focused': { color: (theme) => theme.palette.primary.main },
                                     '& .MuiOutlinedInput-root': {
-                                        '& fieldset': {borderColor: (theme) => theme.palette.primary.main},
-                                        '&:hover fieldset': {borderColor: (theme) => theme.palette.primary.main},
-                                        '&.Mui-focused fieldset': {borderColor: (theme) => theme.palette.primary.main}
+                                        '& fieldset': { borderColor: (theme) => theme.palette.primary.main },
+                                        '&:hover fieldset': { borderColor: (theme) => theme.palette.primary.main },
+                                        '&.Mui-focused fieldset': { borderColor: (theme) => theme.palette.primary.main }
                                     },
                                     '& .MuiOutlinedInput-input': {
                                         borderRadius: 1
