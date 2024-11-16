@@ -1,5 +1,5 @@
 import React from 'react'
-import {useState} from 'react'
+import { useState } from 'react'
 import theme from '~/theme'
 import Box from '@mui/material/Box'
 import ModeSelect from '~/componets/ModeSelect/ModeSelect'
@@ -74,23 +74,25 @@ function AppBar() {
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
-                                <SearchIcon sx={{color: 'white'}}/>
+                                <SearchIcon sx={{ color: 'white' }} />
                             </InputAdornment>
                         ),
                         endAdornment: (
-                            <CloseIcon
-                            fontSize = "small" 
-                            sx={{color: searchValue ? 'white' : 'transparent', cursor: 'pointer'}}
-                            onClick={() => setSearchValue('')}
-                            />
+                            <InputAdornment position="end">
+                                <CloseIcon
+                                    fontSize="small"
+                                    sx={{ color: searchValue ? 'white' : 'transparent', cursor: 'pointer' }}
+                                    onClick={() => setSearchValue('')}
+                                />
+                            </InputAdornment>
                         )
                     }}
                     sx={{
                         minWidth: '120px',
                         maxWidth: '170px',
-                        '& label': {color: 'white'},
-                        '& input': {color: 'white'},
-                        '& label.Mui-focused': {color: 'white'},
+                        '& label': { color: 'white' },
+                        '& input': { color: 'white' },
+                        '& label.Mui-focused': { color: 'white' },
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
                                 borderColor: 'white'

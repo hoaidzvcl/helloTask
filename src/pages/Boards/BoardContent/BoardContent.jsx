@@ -8,12 +8,13 @@ import {
     DndContext,
     useSensor,
     useSensors,
-    MouseSensor,
-    TouchSensor,
+    // MouseSensor,
+    // TouchSensor,
     DragOverlay,
     closestCorners,
     defaultDropAnimationSideEffects
 } from '@dnd-kit/core'
+import { MouseSensor, TouchSensor, } from '~/CustomLib/DndKitSensors'
 import { cloneDeep } from 'lodash'
 import { arrayMove } from '@dnd-kit/sortable'
 import Column from './ListColumns/Column/Column'
@@ -159,7 +160,7 @@ function BoardContent({ board }) {
             if (!activeColumn || !overColumn) return
             if (oldColumnWhenDraggingCard._id !== overColumn._id) {
 
-            
+
             } else {
                 //Lấy vị trí cũ từ active
                 const oldCardIndex = oldColumnWhenDraggingCard?.cards.findIndex(c => c._id === activeDragItemId)
