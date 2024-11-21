@@ -29,7 +29,14 @@ const ACTIVE_DRAG_ITEM_TYPE = {
     CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({ board, createNewColumn, createNewCard, moveColumns, moveCardInTheSameColumn }) {
+function BoardContent({ board,
+    createNewColumn,
+    createNewCard,
+    moveColumns,
+    moveCardInTheSameColumn,
+    moveCardToDiffirentColumns
+}) {
+
     const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
     const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 500 } })
     // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10} })
@@ -66,7 +73,8 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
         over,
         activeColumn,
         activeDraggingCardId,
-        activeDraggingCardData
+        activeDraggingCardData,
+        triggerFrom
     ) => {
         setOrderedColumns(prevColums => {
             //Tìm vị trí index của overCard trong column đích
@@ -125,6 +133,15 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
                 nextOverColumn.cardOrderIds = nextOverColumn.cards.map(card => card._id)
             }
 
+            if (triggerFrom === 'handleDragEnd') {
+                moveCardToDiffirentColumns(
+                    activeDraggingCardId, 
+                    oldColumnWhenDraggingCard._id,
+                    nextOverColumn._id,
+                    nextColumns
+                )
+            }
+
             return nextColumns
         })
     }
@@ -173,7 +190,8 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
                 over,
                 activeColumn,
                 activeDraggingCardId,
-                activeDraggingCardData
+                activeDraggingCardData,
+                'handleDragOver'
             )
         }
     }
@@ -204,7 +222,8 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
                     over,
                     activeColumn,
                     activeDraggingCardId,
-                    activeDraggingCardData
+                    activeDraggingCardData,
+                    'handleDragEnd'
                 )
             } else {
                 //Lấy vị trí cũ từ active
@@ -237,7 +256,7 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns, move
                 const dndOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex)
 
                 setOrderedColumns(dndOrderedColumns)
-                
+
                 moveColumns(dndOrderedColumns)
             }
         }
