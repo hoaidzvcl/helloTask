@@ -13,6 +13,7 @@ import MenuItem from '@mui/material/MenuItem'
 import ListCards from './ListCards/ListCards'
 import TextField from '@mui/material/TextField'
 import { useSortable } from '@dnd-kit/sortable'
+import { useConfirm } from 'material-ui-confirm'
 import CloseIcon from '@mui/icons-material/Close'
 import Typography from '@mui/material/Typography'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -25,7 +26,7 @@ import ContentPaste from '@mui/icons-material/ContentPaste'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
 
-function Column({ column, createNewCard }) {
+function Column({ column, createNewCard, deleteColumnDetail }) {
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
         id: column._id,
         data: { ...column }
@@ -47,7 +48,7 @@ function Column({ column, createNewCard }) {
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
     }
-    
+
     const handleClose = () => {
         setAnchorEl(null)
     }
@@ -72,6 +73,19 @@ function Column({ column, createNewCard }) {
 
         toggleOpenNewCardForm()
         setNewCardTitle('')
+    }
+
+    const confirmDeleteColumn = useConfirm()
+    const hanleDeleteColumn = () => {
+        confirmDeleteColumn({
+            title: 'Delete Column?',
+            description: 'This action will permanetly delete your Column and its Cards! Are you sure?',
+            confirmationText: 'Confirm',
+            cancellationText: 'Cancel',
+
+        }).then(() => {
+            deleteColumnDetail(column._id)
+        }).catch()
     }
 
 
@@ -129,14 +143,11 @@ function Column({ column, createNewCard }) {
                             anchorEl={anchorEl}
                             open={open}
                             onClose={handleClose}
+                            onClick={handleClose}
                             MenuListProps={{
                                 'aria-labelledby': 'basic-column-dropdown',
                             }}
                         >
-                            <MenuItem>
-                                <ListItemIcon><AddCardIcon fontSize="small" /></ListItemIcon>
-                                <ListItemText>Add new card</ListItemText>
-                            </MenuItem>
                             <MenuItem>
                                 <ListItemIcon><ContentCut fontSize="small" /></ListItemIcon>
                                 <ListItemText>Cut</ListItemText>
@@ -150,14 +161,32 @@ function Column({ column, createNewCard }) {
                                 <ListItemText>Paste</ListItemText>
                             </MenuItem>
                             <Divider />
-                            <MenuItem>
-                                <ListItemIcon><DeleteIcon fontSize="small" /></ListItemIcon>
-                                <ListItemText>Romove This Column</ListItemText>
+                            <MenuItem
+                                onClick={toggleOpenNewCardForm}
+                                sx={{
+                                    '&:hover': {
+                                        color: 'success.light',
+                                        '& .add-card-icon': { color: 'success.light' }
+                                    }
+                                }}>
+                                <ListItemIcon><AddCardIcon className="add-card-icon" fontSize="small" /></ListItemIcon>
+                                <ListItemText>Add new card</ListItemText>
                             </MenuItem>
-                            <MenuItem>
+                            <MenuItem
+                                onClick={hanleDeleteColumn}
+                                sx={{
+                                    '&:hover': {
+                                        color: 'warning.dark',
+                                        '& .delete-icon': { color: 'warning.dark' }
+                                    }
+                                }}>
+                                <ListItemIcon><DeleteIcon className="delete-icon" fontSize="small" /></ListItemIcon>
+                                <ListItemText>Delete This Column</ListItemText>
+                            </MenuItem>
+                            {/* <MenuItem>
                                 <ListItemIcon><Cloud fontSize="small" /></ListItemIcon>
                                 <ListItemText>Archive This Column</ListItemText>
-                            </MenuItem>
+                            </MenuItem> */}
                         </Menu>
                     </Box>
                 </Box>

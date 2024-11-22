@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { isEmpty } from 'lodash'
+import { toast } from 'react-toastify'
 import { mapOrder } from '~/utils/sorts'
 import BoardBar from './BoardBar/BoardBar'
 import AppBar from '~/componets/AppBar/AppBar'
@@ -13,7 +14,8 @@ import {
   createNewCardAPI,
   updateBoardDetailAPI,
   updateColumnDetailAPI,
-  moveCardToDiffirentColumnsAPI
+  moveCardToDiffirentColumnsAPI,
+  deleteColumnDetailAPI
 } from '~/apis'
 
 function Board() {
@@ -124,6 +126,19 @@ function Board() {
     })
   }
 
+  const deleteColumnDetail = (columnId) => {
+    // Cập nhật state Board
+    const newBoard ={...board}
+    newBoard.columns = newBoard.columns.filter(c => c._id !== columnId)
+    newBoard.columnOrderIds = newBoard.columnOrderIds.filter(_id => _id !== columnId)
+    setBoard(newBoard)
+
+    //Call API
+    deleteColumnDetailAPI(columnId).then(res => {
+      toast.success(res?.DeleteResult)
+    })
+  }
+
   if (!board) {
     return (
       <Box sx={{
@@ -151,6 +166,7 @@ function Board() {
         moveColumns={moveColumns}
         moveCardInTheSameColumn={moveCardInTheSameColumn}
         moveCardToDifferentColumns={moveCardToDifferentColumns}
+        deleteColumnDetail={deleteColumnDetail}
       />
     </Container>
   )

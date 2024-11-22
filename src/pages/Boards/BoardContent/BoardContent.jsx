@@ -34,7 +34,8 @@ function BoardContent({ board,
     createNewCard,
     moveColumns,
     moveCardInTheSameColumn,
-    moveCardToDifferentColumns
+    moveCardToDifferentColumns,
+    deleteColumnDetail
 }) {
 
     const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
@@ -228,7 +229,7 @@ function BoardContent({ board,
                     'handleDragEnd'
                 )
             } else {
-            //  Xử lí nếu kéo Card trong 1 Column
+                //  Xử lí nếu kéo Card trong 1 Column
                 //Lấy vị trí cũ từ active
                 const oldCardIndex = oldColumnWhenDraggingCard?.cards.findIndex(c => c._id === activeDragItemId)
                 //Lấy vị trí mới từ over
@@ -319,7 +320,11 @@ function BoardContent({ board,
                 height: (theme) => theme.hello.boardContentHeight,
                 p: '10px 0'
             }}>
-                <ListColumns columns={orderedColumns} createNewColumn={createNewColumn} createNewCard={createNewCard} />
+                <ListColumns
+                    columns={orderedColumns}
+                    createNewColumn={createNewColumn}
+                    createNewCard={createNewCard}
+                    deleteColumnDetail={deleteColumnDetail} />
                 <DragOverlay dropAnimation={customDropAnimation}>
                     {(!activeDragItemType) && null}
                     {(activeDragItemId && activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) && <Column column={activeDragItemData} />}
