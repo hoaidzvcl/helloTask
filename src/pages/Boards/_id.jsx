@@ -1,14 +1,20 @@
 import { useState, useEffect } from 'react'
-import AppBar from '~/componets/AppBar/AppBar'
-import BoardBar from './BoardBar/BoardBar'
-import BoardContent from './BoardContent/BoardContent'
-import Container from '@mui/material/Container'
-import { fetchBoardDetailAPI, createNewColumnAPI, createNewCardAPI, updateBoardDetailAPI, updateColumnDetailAPI, moveCardToDiffirentColumnsAPI } from '~/apis'
-import { mockData } from '~/apis/mock-data'
 import { isEmpty } from 'lodash'
-import { generatePlaceholderCard } from '~/utils/formatters'
 import { mapOrder } from '~/utils/sorts'
+import BoardBar from './BoardBar/BoardBar'
+import AppBar from '~/componets/AppBar/AppBar'
+import Container from '@mui/material/Container'
+import BoardContent from './BoardContent/BoardContent'
+import { generatePlaceholderCard } from '~/utils/formatters'
 import { Box, CircularProgress, Typography } from '@mui/material'
+import {
+  fetchBoardDetailAPI,
+  createNewColumnAPI,
+  createNewCardAPI,
+  updateBoardDetailAPI,
+  updateColumnDetailAPI,
+  moveCardToDiffirentColumnsAPI
+} from '~/apis'
 
 function Board() {
   const [board, setBoard] = useState(null)
@@ -19,6 +25,7 @@ function Board() {
     fetchBoardDetailAPI(boardId)
       .then(board => {
         board.columns = mapOrder(board.columns, board.columnOrderIds, '_id')
+
         // Xử lí kéo thả vào một column rỗng
         board.columns.forEach(column => {
           if (isEmpty(column.cards)) {
@@ -42,7 +49,7 @@ function Board() {
 
     createdColumn.cards = [generatePlaceholderCard(createdColumn)]
     createdColumn.cardOrderIds = [generatePlaceholderCard(createdColumn)._id]
-    // console.log(createdColumn)
+
     const newBoard = { ...board }
     newBoard.columns.push(createdColumn)
     newBoard.columnOrderIds.push(createdColumn._id)
@@ -54,7 +61,6 @@ function Board() {
       ...newCardData,
       boardId: board._id
     })
-    // console.log(createdCard)
 
     const newBoard = { ...board }
     const columnToUpdate = newBoard.columns.find(column => column._id === createdCard.columnId)
@@ -96,17 +102,19 @@ function Board() {
     updateColumnDetailAPI(columnId, { cardOrderIds: dndOrderedCardsIds })
   }
 
-  const moveCardToDiffirentColumns = (currentCardId, prevColumnId, nextColumnId, dndOrderedColumns) => {
-    // Set state Board
+  const moveCardToDifferentColumns = (currentCardId, prevColumnId, nextColumnId, dndOrderedColumns) => {
+    // Update cho chuẩn dữ liệu state Board
     const dndOrderedColumnsIds = dndOrderedColumns.map(c => c._id)
     const newBoard = { ...board }
     newBoard.columns = dndOrderedColumns
     newBoard.columnOrderIds = dndOrderedColumnsIds
+    setBoard(newBoard)
 
+    // Gọi API xử lý phía BE
     let prevCardOrderIds = dndOrderedColumns.find(c => c._id === prevColumnId)?.cardOrderIds
+    // Xử lý vấn đề khi kéo Card cuối cùng ra khỏi Column, Column rỗng sẽ có placeholder card, cần xóa nó đi trước khi gửi dữ liệu lên cho phía BE.
     if (prevCardOrderIds[0].includes('placeholder-card')) prevCardOrderIds = []
 
-    // Call API 
     moveCardToDiffirentColumnsAPI({
       currentCardId,
       prevColumnId,
@@ -114,7 +122,6 @@ function Board() {
       nextColumnId,
       nextCardOrderIds: dndOrderedColumns.find(c => c._id === nextColumnId)?.cardOrderIds
     })
-
   }
 
   if (!board) {
@@ -137,12 +144,14 @@ function Board() {
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
       <AppBar />
       <BoardBar board={board} />
-      <BoardContent board={board}
+      <BoardContent 
+        board={board}
         createNewColumn={createNewColumn}
         createNewCard={createNewCard}
         moveColumns={moveColumns}
         moveCardInTheSameColumn={moveCardInTheSameColumn}
-        moveCardToDiffirentColumns={moveCardToDiffirentColumns} />
+        moveCardToDifferentColumns={moveCardToDifferentColumns}
+      />
     </Container>
   )
 }
