@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { toast } from 'react-toastify'
-import Column from './Column/Column'
-import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
-import NoteAddIcon from '@mui/icons-material/NoteAdd'
+import Column from './Column/Column'
+import { toast } from 'react-toastify'
+import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
+import NoteAddIcon from '@mui/icons-material/NoteAdd'
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
 
 function ListColumns({ columns, createNewColumn, createNewCard }) {
@@ -15,11 +15,11 @@ function ListColumns({ columns, createNewColumn, createNewCard }) {
     const [newColumnTitle, setNewColumnTitle] = useState('')
 
     const addNewColumn = () => {
-        if(!newColumnTitle) {
+        if (!newColumnTitle) {
             toast.error('Please enter column title!!')
             return
         }
-        
+
         const newColumnData = {
             title: newColumnTitle
         }
@@ -68,18 +68,19 @@ function ListColumns({ columns, createNewColumn, createNewCard }) {
                             Add new column
                         </Button>
                     </Box>
-                    : <Box sx={{
-                        minWidth: '250px',
-                        maxWidth: '250px',
-                        mx: 2,
-                        p: 1,
-                        borderRadius: '6px',
-                        height: 'fit-content',
-                        bgcolor: '#ffffff3d',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 1
-                    }}>
+                    : <Box
+                        sx={{
+                            minWidth: '250px',
+                            maxWidth: '250px',
+                            mx: 2,
+                            p: 1,
+                            borderRadius: '6px',
+                            height: 'fit-content',
+                            bgcolor: '#ffffff3d',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 1
+                        }}>
                         <TextField
                             label="Enter Column Title..."
                             type="text"
