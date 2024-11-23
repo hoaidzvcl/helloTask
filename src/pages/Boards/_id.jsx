@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { cloneDeep } from 'lodash'
 import BoardBar from './BoardBar/BoardBar'
+import { useParams } from 'react-router-dom'
 import AppBar from '~/componets/AppBar/AppBar'
 import Container from '@mui/material/Container'
 import BoardContent from './BoardContent/BoardContent'
@@ -22,11 +23,13 @@ function Board() {
   // const [board, setBoard] = useState(null)
   const board = useSelector(selectCurrentActiveBoard)
 
+  const { boardId } = useParams()
+
   useEffect(() => {
-    const boardId = '673794d4270b33d675b1c729'
+    // const boardId = '673794d4270b33d675b1c729'
 
     dispatch(fetchBoardDetailAPI(boardId))
-  }, [dispatch])
+  }, [dispatch, boardId])
 
   const moveColumns = (dndOrderedColumns) => {
     const dndOrderedColumnsIds = dndOrderedColumns.map(c => c._id)
