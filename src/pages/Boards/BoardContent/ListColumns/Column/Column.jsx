@@ -6,6 +6,7 @@ import Menu from '@mui/material/Menu'
 import { toast } from 'react-toastify'
 import { CSS } from '@dnd-kit/utilities'
 import Button from '@mui/material/Button'
+import { cloneDeep } from 'lodash'
 import Tooltip from '@mui/material/Tooltip'
 import Divider from '@mui/material/Divider'
 import Cloud from '@mui/icons-material/Cloud'
@@ -20,13 +21,22 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import AddCardIcon from '@mui/icons-material/AddCard'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
+import { useDispatch, useSelector } from 'react-redux'
 import ContentCut from '@mui/icons-material/ContentCut'
 import ContentCopy from '@mui/icons-material/ContentCopy'
 import ContentPaste from '@mui/icons-material/ContentPaste'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
+import { createNewCardAPI, deleteColumnDetailAPI } from '~/apis'
+import {
+    updateCurrentActiveBoard,
+    selectCurrentActiveBoard
+} from '~/redux/activeBoard/activeBoardSlice'
 
-function Column({ column, createNewCard, deleteColumnDetail }) {
+function Column({ column }) {
+    const dispatch = useDispatch()
+    const board = useSelector(selectCurrentActiveBoard)
+
     const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
         id: column._id,
         data: { ...column }
@@ -58,7 +68,7 @@ function Column({ column, createNewCard, deleteColumnDetail }) {
 
     const [newCardTitle, setNewCardTitle] = useState('')
 
-    const addNewCard = () => {
+    const addNewCard = async () => {
         if (!newCardTitle) {
             toast.error('Please enter card title!!', { position: 'bottom-right' })
             return
@@ -69,7 +79,26 @@ function Column({ column, createNewCard, deleteColumnDetail }) {
             columnId: column._id
         }
 
-        createNewCard(newCardData)
+        // Call API và cập nhật lại state Board
+        const createdCard = await createNewCardAPI({
+            ...newCardData,
+            boardId: board._id
+        })
+
+        // const newBoard = { ...board }
+        const newBoard = cloneDeep(board)
+        const columnToUpdate = newBoard.columns.find(column => column._id === createdCard.columnId)
+        if (columnToUpdate) {
+            if (columnToUpdate.cards.some(card => card.FE_PlacehoderCard)) {
+                columnToUpdate.cards = [createdCard]
+                columnToUpdate.cardOrderIds = [createdCard._id]
+            } else {
+                columnToUpdate.cards.push(createdCard)
+                columnToUpdate.cardOrderIds.push(createdCard._id)
+            }
+        }
+        // setBoard(newBoard)
+        dispatch(updateCurrentActiveBoard(newBoard))
 
         toggleOpenNewCardForm()
         setNewCardTitle('')
@@ -84,7 +113,17 @@ function Column({ column, createNewCard, deleteColumnDetail }) {
             cancellationText: 'Cancel',
 
         }).then(() => {
-            deleteColumnDetail(column._id)
+            // Cập nhật state Board
+            const newBoard = { ...board }
+            newBoard.columns = newBoard.columns.filter(c => c._id !== column._id)
+            newBoard.columnOrderIds = newBoard.columnOrderIds.filter(_id => _id !== column._id)
+            // setBoard(newBoard)
+            dispatch(updateCurrentActiveBoard(newBoard))
+
+            //Call API
+            deleteColumnDetailAPI(column._id).then(res => {
+                toast.success(res?.DeleteResult)
+            })
         }).catch()
     }
 

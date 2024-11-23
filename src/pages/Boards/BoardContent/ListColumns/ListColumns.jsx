@@ -1,30 +1,55 @@
 import { useState } from 'react'
+import { cloneDeep } from 'lodash'
 import Box from '@mui/material/Box'
 import Column from './Column/Column'
 import { toast } from 'react-toastify'
 import Button from '@mui/material/Button'
+import { createNewColumnAPI } from '~/apis'
 import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
 import NoteAddIcon from '@mui/icons-material/NoteAdd'
+import { useDispatch, useSelector } from 'react-redux'
+import { generatePlaceholderCard } from '~/utils/formatters'
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
+import { 
+    updateCurrentActiveBoard, 
+    selectCurrentActiveBoard 
+  } from '~/redux/activeBoard/activeBoardSlice'
 
-function ListColumns({ columns, createNewColumn, createNewCard, deleteColumnDetail }) {
+function ListColumns({ columns }) {
+    const dispatch = useDispatch()
+    const board = useSelector(selectCurrentActiveBoard)
+
     const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
     const toggleOpenNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
 
     const [newColumnTitle, setNewColumnTitle] = useState('')
 
-    const addNewColumn = () => {
+    const addNewColumn = async () => {
         if (!newColumnTitle) {
             toast.error('Please enter column title!!')
             return
         }
+        const newColumnData = { title: newColumnTitle }
 
-        const newColumnData = {
-            title: newColumnTitle
-        }
+        // Call API
+        const createdColumn = await createNewColumnAPI({
+            ...newColumnData,
+            boardId: board._id
+        })
 
-        createNewColumn(newColumnData)
+        createdColumn.cards = [generatePlaceholderCard(createdColumn)]
+        createdColumn.cardOrderIds = [generatePlaceholderCard(createdColumn)._id]
+
+        // Spread Operator là Shallow Copy/Clone nên bị dính Rules Immutability trong Redux Toolkit 
+        // không dùng được hàm Push ( sửa mảng trực tiếp) , phải dùng cloneDeep
+        // const newBoard = { ...board }
+        const newBoard = cloneDeep(board)
+        newBoard.columns.push(createdColumn)
+        newBoard.columnOrderIds.push(createdColumn._id)
+
+        // setBoard(newBoard)
+        dispatch(updateCurrentActiveBoard(newBoard))
 
         toggleOpenNewColumnForm()
         setNewColumnTitle('')
@@ -43,11 +68,9 @@ function ListColumns({ columns, createNewColumn, createNewCard, deleteColumnDeta
                     '::-webkit-scrollbar-track': { m: 2 }
                 }}
             >
-                {columns.map(column => <Column 
-                key={column._id} 
-                column={column} 
-                createNewCard={createNewCard} 
-                deleteColumnDetail={deleteColumnDetail}
+                {columns.map(column => <Column
+                    key={column._id}
+                    column={column}
                 />)}
 
                 {!openNewColumnForm
